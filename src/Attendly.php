@@ -13,54 +13,89 @@ if ( ! function_exists('json_decode'))
 class Attendly {
 
 	public $apikey = '';
-	private $url = 'https://attendly.me/api/v4/';
+	public $username = '';
+	public $server = 'https://attendly.me/api/v4/';
+	private $payload = array();
 
-	public function __construct($apikey='')
+
+	public function __construct($username='', $apikey='')
 	{
+		$this->username = $username;
 		$this->apikey = $apikey;
 	}
 
-	public function user_login($name, $password)
+	public function add_event(array $event)
 	{
-		$params = array('user'=>array('name'=>$name,'password'=>$password));
-		return $this->request('user.login', $params);
+		$this->payload['Event'] = $event;
+		return $this;
+	}
+	
+	public function add_address(array $address)
+	{
+		$this->payload['Address'] = $address;
+		return $this;
 	}
 
-	public function event_list()
+	public function add_widget(array $widget)
 	{
-		$params = array();
-		return $this->request('event.list', $params);
+		// Check to see if Widgets is created
+		if ( ! isset($this->payload['Widgets']))
+		{
+			$this->payload['Widgets'] = array();
+		}
+
+		$this->payload['Widgets'][] = $widget;
+		return $this;
 	}
 
-	public function event_get($id)
+	public function add_ticket(array $ticket)
 	{
-		$params = array('event'=>array('id'=>$id));
-		return $this->request('event.get', $params);
+		// Check to see if Tickets is created
+		if ( ! isset($this->payload['Tickets']))
+		{
+			$this->payload['Tickets'] = array();
+		}
+
+		$this->payload['Tickets'][] = $ticket;
+		return $this;
+	}
+	
+	public function add_ticket_limit($ticket_total)
+	{
+		// Check to see if Ticketspool is created
+		if ( ! isset($this->payload['Ticketspool']))
+		{
+			$this->payload['Ticketspool'] = array();
+		}
+
+		$this->payload['Ticketspool']['Total'] = $ticket_total;
+		return $this;
 	}
 
-	private function request($method, $params, $id=FALSE)
+	public function event_create()
+	{
+		return $this->request('event/create');
+	}
+
+	private function request($method, $params=FALSE, $id=FALSE)
 	{
 		if ( ! $id)
 		{
 			$id = time();
 		}
 
-		$payload = array(
-			'jsonrpc' => '2.0',
-			'method' => $method,
-			'id' => time(),
-			'params' => $params);
+		$url = $this->server .= '/'.$method;
 
-		$json_payload = json_encode($payload);
+		$json_payload = json_encode($this->payload);
 
 		// Send the payload and wait for a response
 		$ch = curl_init();
 
 		// Set URL and other appropriate options
-		curl_setopt($ch, CURLOPT_URL, $this->url);
+		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_POST, TRUE);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_payload);
-		curl_setopt($ch, CURLOPT_USERPWD, $this->apikey.':');
+		curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->apikey);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
@@ -69,6 +104,7 @@ class Attendly {
 
 		// Grab URL, and print
 		$response = curl_exec($ch);
+		$HTTP_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 		if (curl_errno($ch) > 0)
 		{
@@ -79,13 +115,6 @@ class Attendly {
 
 		$decoded = json_decode($response, TRUE);
 
-		if (isset($decoded['result']))
-		{
-			return $decoded['result'];
-		}
-		else
-		{
-			return FALSE;
-		}
+		return $decoded;
 	}
 }
