@@ -2,8 +2,8 @@
 require_once(__DIR__.'/../src/Attendly.php');
 
 
-$attendly = new Attendly('ae00001','1lIH8Fq8szwvMZg6A1WU');
-$attendly->server = 'https://api.attendly.net';
+$attendly = new Attendly('testuser','8de323378f4427ec9b38');
+$attendly->server = 'http://localhost:3000';
 
 
 // Create an event
