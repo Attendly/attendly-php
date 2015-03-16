@@ -74,17 +74,61 @@ class Attendly {
 
 	public function event_create()
 	{
-		return $this->request('event/create');
+		return $this->post('event/create');
 	}
 
-	private function request($method, $params=FALSE, $id=FALSE)
+	public function event_get($id)
+	{
+		return $this->get('event/get/'.$id);
+	}
+
+	public function event_update(array $event)
+	{
+		// Need to make sure the event array has an id
+		if (empty($event['Id'])) 
+		{
+			return $this->error('You need to provide an Id to update an event');
+		}
+
+		$this->payload['Event'] = $event;
+		return $this->put('event/update/'.$event['Id']);
+	}
+
+	public function event_list($type='')
+	{
+		return $this->get('event/list/'.$type);
+	}
+
+
+	// Helpers
+	private function error($message)
+	{
+		return array('Status' => 'error', 'Message' => $message);
+	}
+
+	private function get($path)
+	{
+		return $this->request($path, 'GET');
+	}
+
+	private function put($path)
+	{
+		return $this->request($path, 'PUT');
+	}
+
+	private function post($path)
+	{
+		return $this->request($path, 'POST');
+	}
+
+	private function request($path, $method='GET', $id=FALSE)
 	{
 		if ( ! $id)
 		{
 			$id = time();
 		}
 
-		$url = $this->server .= '/'.$method;
+		$url = $this->server.'/'.$path;
 
 		$json_payload = json_encode($this->payload);
 
@@ -93,8 +137,20 @@ class Attendly {
 
 		// Set URL and other appropriate options
 		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POST, TRUE);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $json_payload);
+		switch ($method)
+		{
+		   	case 'POST':
+				curl_setopt($ch, CURLOPT_POST, TRUE);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $json_payload);
+				break;
+			case 'PUT':
+        		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $json_payload);
+				break;
+			case 'GET':
+				curl_setopt($ch, CURLOPT_HTTPGET, TRUE);
+				break;
+		}
 		curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->apikey);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Expect:'));
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -115,6 +171,7 @@ class Attendly {
 
 		$decoded = json_decode($response, TRUE);
 
+		$decoded['HTTP_status'] = $HTTP_status;
 		return $decoded;
 	}
 }

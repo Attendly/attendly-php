@@ -81,6 +81,7 @@ class EventCreateTest extends PHPUnit_Framework_TestCase
 			->event_create();
 
 		$this->assertEquals($result['Status'], 'ok');
+		$this->assertEquals($result['HTTP_status'], 201);
 		$this->assertEquals($result['Result']['Name'], $this->event['Name']);
 	}
 
@@ -97,6 +98,7 @@ class EventCreateTest extends PHPUnit_Framework_TestCase
 			->add_address($this->address)
 			->event_create();
 
+		$this->assertEquals($result['HTTP_status'], 400);
 		$this->assertEquals($result['Status'], 'error');
 	}
 
@@ -108,6 +110,7 @@ class EventCreateTest extends PHPUnit_Framework_TestCase
 			->event_create();
 
 		$this->assertEquals($result['Status'], 'ok');
+		$this->assertEquals($result['HTTP_status'], 201);
 		$this->assertEquals($result['Result']['Name'], $this->event['Name']);
 	}
 
