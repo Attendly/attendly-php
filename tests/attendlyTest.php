@@ -61,6 +61,16 @@ class attendlyTest extends PHPUnit_Framework_TestCase
         'Status' => 'active',
     );
 
+	public $theme = array(
+		'Name' => 'test',
+		'PageBackgroundRGB' => 'cc0000',
+		'HeaderBackgroundRGB' => 'cc0000',
+		'HeaderTextRGB' => 'cc0000',
+		'TextHeadingsRGB' => 'cc0000',
+		'SmallHeadingRGB' => 'cc0000',
+		'Status' => 'active'
+	);
+
     public function setup()
     {
         $this->attendly = new Attendly(
