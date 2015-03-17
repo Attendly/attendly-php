@@ -64,7 +64,7 @@ class EventCreateTest extends PHPUnit_Framework_TestCase
 	public function setup()
 	{
 		$this->attendly = new Attendly($this->test_user, $this->test_apikey);
-		$this->attendly->server = 'http://localhost:3000/v2';
+		$this->attendly->server = 'https://testapi.attendly.net/v2';
 	}
 
 	public function testCreateEvent()
