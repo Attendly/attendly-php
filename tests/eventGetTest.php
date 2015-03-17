@@ -1,25 +1,7 @@
 <?php
 
-class EventGetTest extends PHPUnit_Framework_TestCase
+class EventGetTest extends AttendlyTest
 {
-	public $attendly;
-	private $test_user = 'testuser';
-	private $test_apikey = '8de323378f4427ec9b38';
-	
-	private $event = array(
-		'Name' => 'Test event via API',
-		'Description'=> '<p>This is a test event. Note <strong>HTML</strong>strong></p>p>',
-		'Deadline'=> '2017-11-07T23:00:00Z',
-		'Start'=> '2017-11-10T23:00:00Z',
-		'Stop'=> '2017-11-10T23:00:00Z',
-		'Status'=> 'active'
-	);
-
-	public function setup()
-	{
-		$this->attendly = new Attendly($this->test_user, $this->test_apikey);
-		$this->attendly->server = 'https://testapi.attendly.net/v2';
-	}
 
 	public function testEventGet()
 	{

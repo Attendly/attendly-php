@@ -1,9 +1,9 @@
 <?php
 
-class EventCreateTest extends AttendlyTest
+class AddressCreateTest extends AttendlyTest
 {
-	
-	public function testCreateEvent()
+
+	public function testCreateAddress()
 	{
 		// Create an event
 		$result = $this->attendly
@@ -21,7 +21,7 @@ class EventCreateTest extends AttendlyTest
 		$this->assertEquals($result['Result']['Name'], $this->event['Name']);
 	}
 
-	public function testDodgyEvent()
+	public function testDodgyAddress()
 	{
 		// Create a dodgy event (no event details)
 		$result = $this->attendly
@@ -38,7 +38,7 @@ class EventCreateTest extends AttendlyTest
 		$this->assertEquals($result['Status'], 'error');
 	}
 
-	public function testMinimalEvent()
+	public function testMinimalAddress()
 	{
 		// Create an event without widgets or tickets
 		$result = $this->attendly
