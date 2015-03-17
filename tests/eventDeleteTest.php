@@ -1,8 +1,8 @@
 <?php
 
-class eventGetTest extends AttendlyTest
+class eventDeleteTest extends AttendlyTest
 {
-    public function testEventGet()
+    public function testEventDelete()
     {
         $result = $this->attendly
             ->add_event($this->event)
@@ -19,12 +19,21 @@ class eventGetTest extends AttendlyTest
         $result2 = $this->attendly->event_get($id);
 
         $this->assertEquals($result2['Result']['Name'], $this->event['Name']);
+
+        // Now delete
+        $result3 = $this->attendly->event_delete($id);
+        $this->assertEquals($result['HTTP_status'], 201);
+
+        // Now get the event
+        $result2 = $this->attendly->event_get($id);
+
+        $this->assertEquals($result2['HTTP_status'], 400);
     }
 
-    public function testEventGetInvalidEvent()
+    public function testEventDeleteInvalidEvent()
     {
-        $result = $this->attendly->event_get(0);
-        $this->assertEquals($result['HTTP_status'], 500);
+        $result = $this->attendly->event_delete(0);
+        $this->assertEquals($result['HTTP_status'], 400);
         $this->assertEquals($result['Status'], 'error');
     }
 }
