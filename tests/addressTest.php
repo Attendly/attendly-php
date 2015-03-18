@@ -39,9 +39,9 @@ class addressCreateTest extends attendlyTest
 
         $this->assertEquals($result['HTTP_status'], 400);
         $this->assertEquals($result['Status'], 'error');
-	}
+    }
 
-	public function testAddressDelete()
+    public function testAddressDelete()
     {
         // Create an address
         $result = $this->attendly->address_create($this->address);
@@ -74,7 +74,7 @@ class addressCreateTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testAddressGet()
+    public function testAddressGet()
     {
         // Create an address
         $result = $this->attendly->address_create($this->address);
@@ -98,7 +98,7 @@ class addressCreateTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testAddressUpdate()
+    public function testAddressUpdate()
     {
         // Create an address
         $result = $this->attendly->address_create($this->address);
@@ -118,7 +118,7 @@ class addressCreateTest extends attendlyTest
         $this->assertEquals($result3['HTTP_status'], 204);
     }
 
-	public function testEventUpdateNoId()
+    public function testEventUpdateNoId()
     {
         // Create an address
         $result = $this->attendly->address_create($this->address);
@@ -134,14 +134,12 @@ class addressCreateTest extends attendlyTest
 
         // Change the name
         $result2['Result']['Name'] = 'Address updated';
-		unset($result2['Result']['Id']);
+        unset($result2['Result']['Id']);
         $result3 = $this->attendly->address_update($result2['Result']);
         $this->assertEquals($result3['Status'], 'error');
-	}
+    }
 
     public function testAddressUpdateInvalid()
     {
     }
-
-
 }

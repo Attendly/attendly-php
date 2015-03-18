@@ -495,11 +495,11 @@ class Attendly
         $response = curl_exec($ch);
         $HTTP_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-		// @codeCoverageIgnoreStart
+        // @codeCoverageIgnoreStart
         if (curl_errno($ch) > 0) {
             print_r(curl_error($ch), true);
-		}
-		// @codeCoverageIgnoreEnd
+        }
+        // @codeCoverageIgnoreEnd
 
         curl_close($ch);
 

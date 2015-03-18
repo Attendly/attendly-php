@@ -57,9 +57,9 @@ class eventTest extends attendlyTest
         $this->assertEquals($result['Status'], 'ok');
         $this->assertEquals($result['HTTP_status'], 201);
         $this->assertEquals($result['Result']['Name'], $this->event['Name']);
-	}
-	
-	public function testEventDelete()
+    }
+
+    public function testEventDelete()
     {
         $result = $this->attendly
             ->add_event($this->event)
@@ -94,7 +94,7 @@ class eventTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testEventGet()
+    public function testEventGet()
     {
         $result = $this->attendly
             ->add_event($this->event)
@@ -120,7 +120,7 @@ class eventTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testEventList()
+    public function testEventList()
     {
         $result = $this->attendly
             ->add_event($this->event)
@@ -135,8 +135,8 @@ class eventTest extends attendlyTest
         $this->assertEquals($result2['HTTP_status'], 200);
         $this->assertGreaterThan(0, count($result2['Result']));
     }
-	
-	public function testEventUpdate()
+
+    public function testEventUpdate()
     {
         $result = $this->attendly
             ->add_event($this->event)
@@ -158,7 +158,7 @@ class eventTest extends attendlyTest
         $this->assertEquals($result3['HTTP_status'], 204);
     }
 
-	public function testEventUpdateNoId()
+    public function testEventUpdateNoId()
     {
         $result = $this->attendly
             ->add_event($this->event)
@@ -176,7 +176,7 @@ class eventTest extends attendlyTest
 
         // Change the name
         $result2['Result']['Name'] = 'Event updated';
-		unset($result2['Result']['Id']);
+        unset($result2['Result']['Id']);
         $result3 = $this->attendly->event_update($result2['Result']);
         $this->assertEquals($result3['Status'], 'error');
     }
@@ -186,5 +186,4 @@ class eventTest extends attendlyTest
         $result = $this->attendly->event_get(0);
         $this->assertEquals($result['Status'], 'error');
     }
-
 }

@@ -22,7 +22,7 @@ class widgetCreateTest extends attendlyTest
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an widget
-		$this->text_widget['EventId'] = $result['Result']['Id'];
+        $this->text_widget['EventId'] = $result['Result']['Id'];
 
         $result = $this->attendly->widget_create($this->text_widget);
 
@@ -45,16 +45,16 @@ class widgetCreateTest extends attendlyTest
 
         $this->assertEquals($result['HTTP_status'], 400);
         $this->assertEquals($result['Status'], 'error');
-	}
+    }
 
-	public function testWidgetDelete()
+    public function testWidgetDelete()
     {
         // Create an event
         $result = $this->attendly->event_create($this->event);
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an widget
-		$this->text_widget['EventId'] = $result['Result']['Id'];
+        $this->text_widget['EventId'] = $result['Result']['Id'];
         $result = $this->attendly->widget_create($this->text_widget);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -85,14 +85,14 @@ class widgetCreateTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testWidgetGet()
+    public function testWidgetGet()
     {
         // Create an event
         $result = $this->attendly->event_create($this->event);
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an widget
-		$this->text_widget['EventId'] = $result['Result']['Id'];
+        $this->text_widget['EventId'] = $result['Result']['Id'];
         $result = $this->attendly->widget_create($this->text_widget);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -114,14 +114,14 @@ class widgetCreateTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testWidgetUpdate()
+    public function testWidgetUpdate()
     {
         // Create an event
         $eresult = $this->attendly->event_create($this->event);
         $this->assertEquals($eresult['HTTP_status'], 201);
 
         // Create an widget
-		$this->text_widget['EventId'] = $eresult['Result']['Id'];
+        $this->text_widget['EventId'] = $eresult['Result']['Id'];
         $result = $this->attendly->widget_create($this->text_widget);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -141,14 +141,14 @@ class widgetCreateTest extends attendlyTest
         $this->assertEquals($result3['HTTP_status'], 204);
     }
 
-	public function testWidgetUpdateNoId()
+    public function testWidgetUpdateNoId()
     {
         // Create an event
         $eresult = $this->attendly->event_create($this->event);
         $this->assertEquals($eresult['HTTP_status'], 201);
 
         // Create an widget
-		$this->text_widget['EventId'] = $eresult['Result']['Id'];
+        $this->text_widget['EventId'] = $eresult['Result']['Id'];
         $result = $this->attendly->widget_create($this->text_widget);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -163,14 +163,12 @@ class widgetCreateTest extends attendlyTest
         // Change the name
         $result2['Result']['Label'] = 'Widget updated';
         $result2['Result']['EventId'] = $eresult['Result']['Id'];
-		unset($result2['Result']['Id']);
+        unset($result2['Result']['Id']);
         $result3 = $this->attendly->widget_update($result2['Result']);
         $this->assertEquals($result3['Status'], 'error');
-	}
+    }
 
     public function testWidgetUpdateInvalid()
     {
     }
-
-
 }

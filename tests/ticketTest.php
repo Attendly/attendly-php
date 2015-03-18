@@ -22,7 +22,7 @@ class ticketCreateTest extends attendlyTest
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an ticket
-		$this->ticket_1['EventId'] = $result['Result']['Id'];
+        $this->ticket_1['EventId'] = $result['Result']['Id'];
 
         $result = $this->attendly->ticket_create($this->ticket_1);
 
@@ -45,16 +45,16 @@ class ticketCreateTest extends attendlyTest
 
         $this->assertEquals($result['HTTP_status'], 400);
         $this->assertEquals($result['Status'], 'error');
-	}
+    }
 
-	public function testTicketDelete()
+    public function testTicketDelete()
     {
         // Create an event
         $result = $this->attendly->event_create($this->event);
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an ticket
-		$this->ticket_1['EventId'] = $result['Result']['Id'];
+        $this->ticket_1['EventId'] = $result['Result']['Id'];
         $result = $this->attendly->ticket_create($this->ticket_1);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -85,14 +85,14 @@ class ticketCreateTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testTicketGet()
+    public function testTicketGet()
     {
         // Create an event
         $result = $this->attendly->event_create($this->event);
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an ticket
-		$this->ticket_1['EventId'] = $result['Result']['Id'];
+        $this->ticket_1['EventId'] = $result['Result']['Id'];
         $result = $this->attendly->ticket_create($this->ticket_1);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -114,14 +114,14 @@ class ticketCreateTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testTicketUpdate()
+    public function testTicketUpdate()
     {
         // Create an event
         $result = $this->attendly->event_create($this->event);
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an ticket
-		$this->ticket_1['EventId'] = $result['Result']['Id'];
+        $this->ticket_1['EventId'] = $result['Result']['Id'];
         $result = $this->attendly->ticket_create($this->ticket_1);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -139,14 +139,14 @@ class ticketCreateTest extends attendlyTest
         $this->assertEquals($result3['HTTP_status'], 204);
     }
 
-	public function testTicketUpdateNoId()
+    public function testTicketUpdateNoId()
     {
         // Create an event
         $result = $this->attendly->event_create($this->event);
         $this->assertEquals($result['HTTP_status'], 201);
 
         // Create an ticket
-		$this->ticket_1['EventId'] = $result['Result']['Id'];
+        $this->ticket_1['EventId'] = $result['Result']['Id'];
         $result = $this->attendly->ticket_create($this->ticket_1);
 
         $this->assertEquals($result['Status'], 'ok');
@@ -160,7 +160,7 @@ class ticketCreateTest extends attendlyTest
 
         // Change the name
         $result2['Result']['Name'] = 'Ticket updated';
-		unset($result2['Result']['Id']);
+        unset($result2['Result']['Id']);
         $result3 = $this->attendly->ticket_update($result2['Result']);
         $this->assertEquals($result3['Status'], 'error');
     }
@@ -168,6 +168,4 @@ class ticketCreateTest extends attendlyTest
     public function testTicketUpdateInvalid()
     {
     }
-
-
 }

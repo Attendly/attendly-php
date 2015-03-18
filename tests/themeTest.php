@@ -39,9 +39,9 @@ class themeTest extends attendlyTest
 
         $this->assertEquals($result['HTTP_status'], 400);
         $this->assertEquals($result['Status'], 'error');
-	}
+    }
 
-	public function testThemeGet()
+    public function testThemeGet()
     {
         // Create an theme
         $result = $this->attendly->theme_create($this->theme);
@@ -66,7 +66,7 @@ class themeTest extends attendlyTest
         $this->assertEquals($result['Status'], 'error');
     }
 
-	public function testThemeUpdate()
+    public function testThemeUpdate()
     {
         // Create an theme
         $result = $this->attendly->theme_create($this->theme);
@@ -80,17 +80,17 @@ class themeTest extends attendlyTest
 
         $result2 = $this->attendly->theme_get($id);
 
-        // Change a colour 
+        // Change a colour
         $result2['Result']['HeaderTextRGB'] = '00ff00';
         $result3 = $this->attendly->theme_update($result2['Result']);
         $this->assertEquals($result3['HTTP_status'], 204);
-		 
+
         // Now get the theme
         $result4 = $this->attendly->theme_get($id);
-		$this->assertTrue($result4['Result']['HeaderTextRGB'] === '00ff00');
+        $this->assertTrue($result4['Result']['HeaderTextRGB'] === '00ff00');
     }
 
-	public function testThemeUpdateNoId()
+    public function testThemeUpdateNoId()
     {
         // Create an theme
         $result = $this->attendly->theme_create($this->theme);
@@ -104,9 +104,9 @@ class themeTest extends attendlyTest
 
         $result2 = $this->attendly->theme_get($id);
 
-        // Change a colour 
+        // Change a colour
         $result2['Result']['HeaderTextRGB'] = '00ff00';
-		unset($result2['Result']['Id']);
+        unset($result2['Result']['Id']);
         $result3 = $this->attendly->theme_update($result2['Result']);
         $this->assertEquals($result3['Status'], 'error');
     }
@@ -114,6 +114,4 @@ class themeTest extends attendlyTest
     public function testThemeUpdateInvalid()
     {
     }
-
-
 }
