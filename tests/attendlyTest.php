@@ -61,14 +61,26 @@ class attendlyTest extends PHPUnit_Framework_TestCase
         'Status' => 'active',
     );
 
-	public $theme = array(
-		'Name' => 'test',
-		'PageBackgroundRGB' => 'cc0000',
-		'HeaderBackgroundRGB' => 'cc0000',
-		'HeaderTextRGB' => 'cc0000',
-		'TextHeadingsRGB' => 'cc0000',
-		'SmallHeadingRGB' => 'cc0000',
-		'Status' => 'active'
+    public $theme = array(
+        'Name' => 'test',
+        'PageBackgroundRGB' => 'cc0000',
+        'HeaderBackgroundRGB' => 'cc0000',
+        'HeaderTextRGB' => 'cc0000',
+        'TextHeadingsRGB' => 'cc0000',
+        'SmallHeadingRGB' => 'cc0000',
+        'Status' => 'active',
+    );
+
+	public $ticketspool = array(
+		'Total' => 1000,
+		'ShowFees' => TRUE,
+	);
+
+	public $fieldset = array(
+		'Name' => 'Testfieldset',
+		'Legend' => 'A test fieldset',
+		'Order' => 2,
+		'Description' => 'A fieldset description',
 	);
 
     public function setup()
@@ -77,5 +89,6 @@ class attendlyTest extends PHPUnit_Framework_TestCase
             getenv('ATTENDLY_API_TEST_USER'),
             getenv('ATTENDLY_API_TEST_KEY'));
         $this->attendly->server = getenv('ATTENDLY_API_TEST_SERVER');
-    }
+	}
 }
+

@@ -136,7 +136,7 @@ class Attendly
     {
         // Need to make sure the event array has an id
         if (empty($event['Id'])) {
-            return $this->error(ERROR_NO_ID);
+            return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Event'] = $event;
@@ -158,8 +158,8 @@ class Attendly
 
     /**
      * Returns a list of events. You can specify the type of events you want
-     * returned. Options are:
-     * 
+     * returned. Options are:.
+     *
      *     active     All the active events (even expired ones)
      *     available  All the active and available events (not expired).
      *
@@ -209,7 +209,7 @@ class Attendly
     {
         // Need to make sure the address array has an id
         if (empty($address['Id'])) {
-            return $this->error(ERROR_NO_ID);
+            return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Address'] = $address;
@@ -264,7 +264,7 @@ class Attendly
     {
         // Need to make sure the ticket array has an id
         if (empty($ticket['Id'])) {
-            return $this->error(ERROR_NO_ID);
+            return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Ticket'] = $ticket;
@@ -319,7 +319,7 @@ class Attendly
     {
         // Need to make sure the widget array has an id
         if (empty($widget['Id'])) {
-            return $this->error(ERROR_NO_ID);
+            return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Widget'] = $widget;
@@ -337,61 +337,6 @@ class Attendly
     public function widget_delete($id)
     {
         return $this->delete('widget/delete/'.$id);
-    }
-
-    /**
-     * Creates an fieldset.
-     *
-     * @return array Response from api
-     */
-    public function fieldset_create(array $fieldset)
-    {
-        $this->payload['Fieldset'] = $fieldset;
-
-        return $this->post('fieldset/create');
-    }
-
-    /**
-     * Get an fieldset.
-     *
-     * @param int $id The fieldset id
-     *
-     * @return array Response from api
-     */
-    public function fieldset_get($id)
-    {
-        return $this->get('fieldset/get/'.$id);
-    }
-
-    /**
-     * Update an fieldset.
-     *
-     * @param array $fieldset The fieldset object
-     *
-     * @return array Response from api
-     */
-    public function fieldset_update(array $fieldset)
-    {
-        // Need to make sure the fieldset array has an id
-        if (empty($fieldset['Id'])) {
-            return $this->error(ERROR_NO_ID);
-        }
-
-        $this->payload['Fieldset'] = $fieldset;
-
-        return $this->put('fieldset/update/'.$fieldset['Id']);
-    }
-
-    /**
-     * Delete an fieldset.
-     *
-     * @param int $id The fieldset id
-     *
-     * @return array Response from api
-     */
-    public function fieldset_delete($id)
-    {
-        return $this->delete('fieldset/delete/'.$id);
     }
 
     /**
@@ -429,24 +374,12 @@ class Attendly
     {
         // Need to make sure the theme array has an id
         if (empty($theme['Id'])) {
-            return $this->error(ERROR_NO_ID);
+            return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Theme'] = $theme;
 
         return $this->put('theme/update/'.$theme['Id']);
-    }
-
-    /**
-     * Delete an theme.
-     *
-     * @param int $id The theme id
-     *
-     * @return array Response from api
-     */
-    public function theme_delete($id)
-    {
-        return $this->delete('theme/delete/'.$id);
     }
 
     /**
@@ -484,26 +417,13 @@ class Attendly
     {
         // Need to make sure the ticketspool array has an id
         if (empty($ticketspool['Id'])) {
-            return $this->error(ERROR_NO_ID);
+            return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Ticketspool'] = $ticketspool;
 
         return $this->put('ticketspool/update/'.$ticketspool['Id']);
     }
-
-    /**
-     * Delete an ticketspool.
-     *
-     * @param int $id The ticketspool id
-     *
-     * @return array Response from api
-     */
-    public function ticketspool_delete($id)
-    {
-        return $this->delete('ticketspool/delete/'.$id);
-    }
-
 
     // Helpers
     private function error($message)
@@ -575,9 +495,11 @@ class Attendly
         $response = curl_exec($ch);
         $HTTP_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
+		// @codeCoverageIgnoreStart
         if (curl_errno($ch) > 0) {
             print_r(curl_error($ch), true);
-        }
+		}
+		// @codeCoverageIgnoreEnd
 
         curl_close($ch);
 
