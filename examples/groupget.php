@@ -4,7 +4,6 @@ require_once('settings.php');
 require_once('../src/Attendly.php');
 
 $api = new Attendly(API_USER, API_KEY);
-$api->server = API_SERVER;
 
 // To work out which group to get, get a list of all the groups and then get the
 // first one.
@@ -25,4 +24,3 @@ echo '<h1>Group get</h1><pre><code class="JSON">';
 echo print_r($out, TRUE);
 
 echo '</code></pre>'.footer();
-

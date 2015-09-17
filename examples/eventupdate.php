@@ -4,7 +4,6 @@ require_once('settings.php');
 require_once('../src/Attendly.php');
 
 $api = new Attendly(API_USER, API_KEY);
-$api->server = API_SERVER;
 
 // To work out which event to get, get a list of all the events and then get the
 // first one.
