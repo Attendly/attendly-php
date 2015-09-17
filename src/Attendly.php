@@ -3,6 +3,8 @@
 /**
  * Attendly API.
  *
+ * @Version: 2.3.0
+ *
  * Library for accessing the Attendly api.
  *
  * @author Andrew Edwards <andrew@attendly.com>
@@ -20,12 +22,12 @@ if (! function_exists('json_decode')) {
 
 class Attendly
 {
-    const VERSION = 2.1;
-    const ERROR_NO_ID = 'You need to provide an Id';
+    const VERSION = '2.3.0';
+    const ERROR_NO_ID = 'You need to provide an ID';
 
     public $apikey = '';
     public $username = '';
-    public $server = 'https://attendly.me/api/v4/';
+    public $server = 'https://api.attendly.net/v2';
     private $payload = array();
 
     /**
@@ -38,63 +40,6 @@ class Attendly
     {
         $this->username = $username;
         $this->apikey = $apikey;
-    }
-
-    public function add_event(array $event)
-    {
-        $this->payload['Event'] = $event;
-
-        return $this;
-    }
-
-    public function add_address(array $address)
-    {
-        $this->payload['Address'] = $address;
-
-        return $this;
-    }
-
-    public function add_theme(array $theme)
-    {
-        $this->payload['Theme'] = $theme;
-
-        return $this;
-    }
-
-    public function add_widget(array $widget)
-    {
-        // Check to see if Widgets is created
-        if (! isset($this->payload['Widgets'])) {
-            $this->payload['Widgets'] = array();
-        }
-
-        $this->payload['Widgets'][] = $widget;
-
-        return $this;
-    }
-
-    public function add_ticket(array $ticket)
-    {
-        // Check to see if Tickets is created
-        if (! isset($this->payload['Tickets'])) {
-            $this->payload['Tickets'] = array();
-        }
-
-        $this->payload['Tickets'][] = $ticket;
-
-        return $this;
-    }
-
-    public function add_ticket_limit($ticket_total)
-    {
-        // Check to see if Ticketspool is created
-        if (! isset($this->payload['Ticketspool'])) {
-            $this->payload['Ticketspool'] = array();
-        }
-
-        $this->payload['Ticketspool']['Total'] = $ticket_total;
-
-        return $this;
     }
 
     /**
@@ -122,8 +67,32 @@ class Attendly
      */
     public function event_get($id)
     {
-        return $this->get('event/get/'.$id);
+        return $this->get('event/'.$id);
     }
+
+    /**
+     * Gets an events tickets.
+     *
+     * @param int $id The event id
+     *
+     * @return array Response from api
+     */
+    public function event_tickets($id)
+    {
+        return $this->get('event/'.$id.'/tickets');
+	}
+
+    /**
+     * Gets an events teams.
+     *
+     * @param int $id The event id
+     *
+     * @return array Response from api
+     */
+    public function event_teams($id)
+    {
+        return $this->get('event/'.$id.'/teams');
+	}
 
     /**
      * Update an event.
@@ -133,15 +102,15 @@ class Attendly
      * @return array Response from api
      */
     public function event_update(array $event)
-    {
+	{
         // Need to make sure the event array has an id
-        if (empty($event['Id'])) {
+		if (empty($event['ID'])) {
             return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Event'] = $event;
 
-        return $this->put('event/update/'.$event['Id']);
+        return $this->put('event/'.$event['ID']);
     }
 
     /**
@@ -153,7 +122,7 @@ class Attendly
      */
     public function event_delete($id)
     {
-        return $this->delete('event/delete/'.$id);
+        return $this->delete('event/'.$id);
     }
 
     /**
@@ -169,9 +138,18 @@ class Attendly
      *
      * @return array Response from api
      */
-    public function event_list($type = '')
-    {
-        return $this->get('event/list/'.$type);
+    public function event_list($type = '', $id= '')
+	{
+        // Need to make sure the ID exists for group lists
+		if ($type === 'group' AND empty($id)) {
+            return $this->error(self::ERROR_NO_ID);
+		}
+
+		if ($type === 'group')
+		{
+			$type = 'group/'.$id;
+		}
+        return $this->get('events/'.$type);
     }
 
     /**
@@ -183,7 +161,7 @@ class Attendly
     {
         $this->payload['Address'] = $address;
 
-        return $this->post('address/create');
+        return $this->post('address');
     }
 
     /**
@@ -195,7 +173,7 @@ class Attendly
      */
     public function address_get($id)
     {
-        return $this->get('address/get/'.$id);
+        return $this->get('address/'.$id);
     }
 
     /**
@@ -208,13 +186,13 @@ class Attendly
     public function address_update(array $address)
     {
         // Need to make sure the address array has an id
-        if (empty($address['Id'])) {
+        if (empty($address['ID'])) {
             return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Address'] = $address;
 
-        return $this->put('address/update/'.$address['Id']);
+        return $this->put('address/'.$address['ID']);
     }
 
     /**
@@ -226,8 +204,49 @@ class Attendly
      */
     public function address_delete($id)
     {
-        return $this->delete('address/delete/'.$id);
+        return $this->delete('address/'.$id);
     }
+
+    /**
+     * Get an group.
+     *
+     * @param int $id The group id
+     *
+     * @return array Response from api
+     */
+    public function group_get($id)
+    {
+        return $this->get('group/'.$id);
+	}
+
+    /**
+     * Update an group.
+     *
+     * @param array $group The group object
+     *
+     * @return array Response from api
+     */
+    public function group_update(array $group)
+	{
+        // Need to make sure the group array has an id
+		if (empty($group['ID'])) {
+            return $this->error(self::ERROR_NO_ID);
+        }
+
+        $this->payload['Group'] = $group;
+
+        return $this->put('group/'.$group['ID']);
+	}
+
+    /**
+     * Returns a list of groups
+     *
+     * @return array Response from api
+     */
+    public function group_list()
+    {
+        return $this->get('groups');
+	}
 
     /**
      * Creates an ticket.
@@ -238,7 +257,7 @@ class Attendly
     {
         $this->payload['Ticket'] = $ticket;
 
-        return $this->post('ticket/create');
+        return $this->post('ticket');
     }
 
     /**
@@ -250,7 +269,7 @@ class Attendly
      */
     public function ticket_get($id)
     {
-        return $this->get('ticket/get/'.$id);
+        return $this->get('ticket/'.$id);
     }
 
     /**
@@ -263,13 +282,13 @@ class Attendly
     public function ticket_update(array $ticket)
     {
         // Need to make sure the ticket array has an id
-        if (empty($ticket['Id'])) {
+        if (empty($ticket['ID'])) {
             return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Ticket'] = $ticket;
 
-        return $this->put('ticket/update/'.$ticket['Id']);
+        return $this->put('ticket/'.$ticket['ID']);
     }
 
     /**
@@ -281,7 +300,7 @@ class Attendly
      */
     public function ticket_delete($id)
     {
-        return $this->delete('ticket/delete/'.$id);
+        return $this->delete('ticket/'.$id);
     }
 
     /**
@@ -293,7 +312,7 @@ class Attendly
     {
         $this->payload['Widget'] = $widget;
 
-        return $this->post('widget/create');
+        return $this->post('widget');
     }
 
     /**
@@ -305,7 +324,7 @@ class Attendly
      */
     public function widget_get($id)
     {
-        return $this->get('widget/get/'.$id);
+        return $this->get('widget/'.$id);
     }
 
     /**
@@ -318,13 +337,13 @@ class Attendly
     public function widget_update(array $widget)
     {
         // Need to make sure the widget array has an id
-        if (empty($widget['Id'])) {
+        if (empty($widget['ID'])) {
             return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Widget'] = $widget;
 
-        return $this->put('widget/update/'.$widget['Id']);
+        return $this->put('widget/'.$widget['ID']);
     }
 
     /**
@@ -336,7 +355,7 @@ class Attendly
      */
     public function widget_delete($id)
     {
-        return $this->delete('widget/delete/'.$id);
+        return $this->delete('widget/'.$id);
     }
 
     /**
@@ -348,7 +367,7 @@ class Attendly
     {
         $this->payload['Theme'] = $theme;
 
-        return $this->post('theme/create');
+        return $this->post('theme');
     }
 
     /**
@@ -360,7 +379,7 @@ class Attendly
      */
     public function theme_get($id)
     {
-        return $this->get('theme/get/'.$id);
+        return $this->get('theme/'.$id);
     }
 
     /**
@@ -373,13 +392,13 @@ class Attendly
     public function theme_update(array $theme)
     {
         // Need to make sure the theme array has an id
-        if (empty($theme['Id'])) {
+        if (empty($theme['ID'])) {
             return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Theme'] = $theme;
 
-        return $this->put('theme/update/'.$theme['Id']);
+        return $this->put('theme/'.$theme['ID']);
     }
 
     /**
@@ -391,7 +410,7 @@ class Attendly
     {
         $this->payload['Ticketspool'] = $ticketspool;
 
-        return $this->post('ticketspool/create');
+        return $this->post('ticketspool');
     }
 
     /**
@@ -403,7 +422,7 @@ class Attendly
      */
     public function ticketspool_get($id)
     {
-        return $this->get('ticketspool/get/'.$id);
+        return $this->get('ticketspool/'.$id);
     }
 
     /**
@@ -416,13 +435,13 @@ class Attendly
     public function ticketspool_update(array $ticketspool)
     {
         // Need to make sure the ticketspool array has an id
-        if (empty($ticketspool['Id'])) {
+        if (empty($ticketspool['ID'])) {
             return $this->error(self::ERROR_NO_ID);
         }
 
         $this->payload['Ticketspool'] = $ticketspool;
 
-        return $this->put('ticketspool/update/'.$ticketspool['Id']);
+        return $this->put('ticketspool/'.$ticketspool['ID']);
     }
 
     // Helpers
