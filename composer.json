@@ -1,6 +1,6 @@
 {
-    "name": "attendly/attendly-php",
-    "description": "A library for accessing the Attendly API",
+  "name": "attendly/attendly-php",
+  "description": "A library for accessing the Attendly API",
 	"type": "library",
 	"keywords": ["attendly", "api"],
 	"homepage": "https://github.com/Attendly/attendly-php",

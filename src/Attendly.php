@@ -3,7 +3,7 @@
 /**
  * Attendly API.
  *
- * @Version: 2.3.0
+ * @Version: 2.4.0
  *
  * Library for accessing the Attendly api.
  *
@@ -22,7 +22,7 @@ if (! function_exists('json_decode')) {
 
 class Attendly
 {
-    const VERSION = '2.3.0';
+    const VERSION = '2.4.0';
     const ERROR_NO_ID = 'You need to provide an ID';
 
     public $apikey = '';
